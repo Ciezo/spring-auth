@@ -59,8 +59,8 @@ public class WebSecurityConfig {
                          * @note Remember, These are the basic credentials.
                          * Particularly, your typical way of asking user authentication
                          */
-                        .username("cloyd")           // typical username credential
-                        .password("12345678")       // typical password
+                        .username("user")           // typical username credential
+                        .password("password")       // typical password
                         .roles("USER")             // is there an admin role?
                         .build();
 
