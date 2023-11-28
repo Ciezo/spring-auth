@@ -21,6 +21,10 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        /**
+         * @note This method, SecurityFilterChain, allows us to create our definitions
+         * of which paths are allowed to all user traffic, and which ones are not
+         */
         http
                 .authorizeHttpRequests((requests) -> requests
 //                        This is where every user can have access to.

@@ -19,7 +19,6 @@ public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * @note  Spring Boot automatically secures all HTTP endpoints with “basic” authentication.
-     * @todo Add spring security to the classpath
      */
 
 }
