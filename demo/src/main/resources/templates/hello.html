@@ -1,9 +1,23 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <title>Hello World!</title>
 </head>
 <body>
-<h1>Hello world! Hehehe </h1>
+<h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+
+<!-- Sign-out form
+@note Submit all the post for the logging out of user on the /logout
+-->
+<form th:action="@{/logout}" method="post">
+  <input type="submit" value="Sign Out"/>
+<!--
+@note This is where the user is redirected upon a successful authentication
+
+@note Upon successfully signing out, your application is sent to /login?logout,
+and your page displays the appropriate success message.
+-->
+</form>
 </body>
 </html>
