@@ -12,9 +12,11 @@
 </div>
 <!-- Post all user credentials on the /login route -->
 <form th:action="@{/login}" method="post">
-  <div><label> User Name : <input type="text" name="username"/> </label></div>
-  <div><label> Password: <input type="password" name="password"/> </label></div>
+  <div><label> User Name : <input type="text" name="username" required autofocus/> </label></div>
+  <div><label> Password: <input type="password" name="password" required autofocus/> </label></div>
   <div><input type="submit" value="Sign In"/></div>
+</form>
+</body>
 <!--
   @note
   Spring Security provides a filter that intercepts that request and authenticates the user.
@@ -25,6 +27,4 @@
   Upon successfully signing out, your application is sent to /login?logout,
   and your page displays the appropriate success message.
 -->
-</form>
-</body>
 </html>

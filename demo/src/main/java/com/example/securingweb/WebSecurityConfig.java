@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity                      // This annotation helps to enable Spring (basic) authentication
@@ -44,7 +46,12 @@ public class WebSecurityConfig {
                          * login.html
                          */
                         .loginPage("/login")            // Here is where most of your view (login) form is rendered
+                        .loginProcessingUrl("/perform_login")
                         .permitAll()                    // Here you try to authenticate all user traffic
+                        /**
+                         * @note the permitAll() method allows access to the specified URLs without authentication
+                         */
+
                 )
                 .logout((logout) -> logout.permitAll());
 
@@ -53,19 +60,24 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        /**
-                         * @note Remember, These are the basic credentials.
-                         * Particularly, your typical way of asking user authentication
-                         */
-                        .username("user")           // typical username credential
-                        .password("password")       // typical password
-                        .roles("USER")             // is there an admin role?
-                        .build();
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER")
+                .build();
 
         return new InMemoryUserDetailsManager(user);
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+        /**
+         * @note all user credentials such as passwords
+         * should be encrypted and stored in plain-text while in memory
+         * in the browser
+         */
+    }
+
 
 
 
@@ -87,5 +99,12 @@ public class WebSecurityConfig {
      *
      * @note Remember the form processing:
      * - This usually consist of validating user credentials
+     *
+     *
+     *
+     * @note Access to "/" and "/home" is permitted for all users (permitAll()).
+     * Authentication is required for all other URLs.
+     * The login page ("/login") is accessible to all users (permitAll()).
+     * Logging out is permitted for all users (permitAll()).
      */
 }
