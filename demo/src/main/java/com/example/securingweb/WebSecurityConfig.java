@@ -11,6 +11,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.Arrays;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity                      // This annotation helps to enable Spring (basic) authentication
@@ -46,7 +50,6 @@ public class WebSecurityConfig {
                          * login.html
                          */
                         .loginPage("/login")            // Here is where most of your view (login) form is rendered
-                        .loginProcessingUrl("/perform_login")
                         .permitAll()                    // Here you try to authenticate all user traffic
                         /**
                          * @note the permitAll() method allows access to the specified URLs without authentication
@@ -60,11 +63,13 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user")
+        System.out.println("Logging in right now....");
+        UserDetails user = User.withUsername("username")
                 .password(passwordEncoder().encode("password"))
                 .roles("USER")
                 .build();
-
+        System.out.println("Username provided: " + user.getUsername());
+        System.out.println("Password provided: " + user.getPassword());
         return new InMemoryUserDetailsManager(user);
     }
 
@@ -78,7 +83,18 @@ public class WebSecurityConfig {
          */
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
+        configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 
 
 
